@@ -2,67 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define ESC 27
-#define EMPTY_LINE_PLACEHOLDER "\t"
-
-char *user_strtok_r(char *str, char delim, char **save_ptr);
-void print_osc(const char *label, const char *uri);
-int contains_inline_link(const char *line);
-char *extract_markdown_link_info(char *line, char *title, char *link);
-int count_stylizers(char *line);
-char *mdstyle_to_ansi(char *line);
-void replace_consecutive_newlines(char *str);
-
-typedef struct {
-    char title[512];
-    char url[512];
-} LINK;
-
-int main(int argc, char *argv[]) {
-    
-    if (argc < 2) {
-        fprintf(stderr, "Caller did not supply file path to program");
-    }
-    
-    char *path;
-    strcpy(path, argv[1]);
-    
-    FILE *file;
-    file = fopen(path, "r");
-
-    if (file == NULL) {
-        fprintf(stderr, "Out of memory");
-    }
-    test_file[] = "1\n2\n\n3\n\n\n0";
-
-    replace_consecutive_newlines(test_file);
-
-    LINK link;
-    char *stoken, *stok_save;
-    char *ntoken, *ntok_save;
-
-    // Split first by line, then by space 
-    ntoken = user_strtok_r(test_file, '\n', &ntok_save);
-
-    while (ntoken != NULL) {
-        if (contains_inline_link(ntoken)) {
-            extract_markdown_link_info(ntoken, link.title, link.url);
-            print_osc(link.title, link.url);
-        } else {
-            stoken = user_strtok_r(ntoken, ' ', &stok_save);
-            while (stoken != NULL) {
-                printf("%s ", stoken);
-                stoken = user_strtok_r(NULL, ' ', &stok_save);
-            }
-            printf("\n");
-        }
-
-        ntoken = user_strtok_r(NULL, '\n', &ntok_save);
-    }
-
-    return 0;
-}
-
 void print_osc(const char *label, const char *uri) {
     printf("%c]8;;%s%c\\%s%c]8;;%c\\", ESC, uri, ESC, label, ESC, ESC);
 }
