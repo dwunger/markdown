@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define ESC 27
+#define EMPTY_LINE_PLACEHOLDER "@@EMPTY_LINE@@"
+
 void print_osc(const char *label, const char *uri) {
     printf("%c]8;;%s%c\\%s%c]8;;%c\\", ESC, uri, ESC, label, ESC, ESC);
 }

@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 extern "C" {
 #include "markdown.h"
 }
