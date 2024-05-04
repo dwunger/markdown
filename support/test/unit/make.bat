@@ -21,4 +21,11 @@ for %%d in (%link_dirs%) do (
 cd "%build_dir%"
 cmake .
 cmake --build .
-ctest -C Debug
+::ctest -C Debug
+
+setlocal
+set "exec_path=%project_dir%\build\test\unit\Debug"
+for %%x in (%exec_path%\*.exe) do (
+    "%%x"
+)
+endlocal
