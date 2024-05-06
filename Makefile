@@ -54,8 +54,8 @@ $(BIN_DIR):
 	powershell -Command "New-Item -ItemType Directory -Force -Path $@"
 
 clean:
-	powershell -Command "Remove-Item -Recurse -Force $(BUILD_DIR)"
-	powershell -Command "Remove-Item -Recurse -Force $(GTEST_DIR)"
+	powershell -Command "if (Test-Path $(BUILD_DIR)) {Remove-Item -Recurse -Force $(BUILD_DIR)}"
+	powershell -Command "if (Test-Path $(GTEST_DIR)) {Remove-Item -Recurse -Force $(GTEST_DIR)}"
 
 help:
 	@echo "Available targets:"
