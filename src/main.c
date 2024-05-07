@@ -5,47 +5,44 @@
 #include "markdown.h"
 
 
-int main(int argc, char *argv[]) {
+size_t get_file_size(FILE *stream)
+{
+    // Save cursor position
+    long store_position = 0;
+    store_position = ftell(stream);
     
+    // Move cursor to start of file
+    fseek(stream, 0, SEEK_SET);
+    size_t fstart = ftell(stream);
+
+    // Advance cursor to EOF
+    fseek(stream, 0, SEEK_END);
+    size_t fend = ftell(stream);
+    
+    // Restore cursor position
+    fseek(stream, store_position, SEEK_SET);
+
+    return (size_t)(fend - fstart);
+}
+
+int main(int argc, char *argv[])
+{
     if (argc < 2) {
-        fprintf(stderr, "Caller did not supply file path to program");
+        fprintf(stderr, "User must supply path to markdown file\n");
+        exit(1);
     }
     
-    char *path;
-    strcpy(path, argv[1]);
-    
-    FILE *file;
-    file = fopen(path, "r");
+    /* Create a file object pointed at user's markdown file */
+    FILE *file_ptr;
+    file_ptr = fopen(argv[1], "r");
 
-    if (file == NULL) {
-        fprintf(stderr, "Out of memory");
-    }
-    char test_file[] = "1\n2\n\n3\n\n\n0";
+    /* Allocate space for file on heap */
+    char *contents = malloc(sizeof(char) * get_file_size(file_ptr));
+    fread(contents, sizeof(char), get_file_size(file_ptr), file_ptr);
 
-    replace_consecutive_newlines(test_file);
 
-    LINK link;
-    char *stoken, *stok_save;
-    char *ntoken, *ntok_save;
-
-    // Split first by line, then by space 
-    ntoken = user_strtok_r(test_file, '\n', &ntok_save);
-
-    while (ntoken != NULL) {
-        if (contains_inline_link(ntoken)) {
-            extract_markdown_link_info(ntoken, link.title, link.url);
-            print_osc(link.title, link.url);
-        } else {
-            stoken = user_strtok_r(ntoken, ' ', &stok_save);
-            while (stoken != NULL) {
-                printf("%s ", stoken);
-                stoken = user_strtok_r(NULL, ' ', &stok_save);
-            }
-            printf("\n");
-        }
-
-        ntoken = user_strtok_r(NULL, '\n', &ntok_save);
-    }
-
+    /* free file buffer */
+    free(contents);
     return 0;
 }
+
