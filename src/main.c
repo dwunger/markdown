@@ -5,8 +5,8 @@
 #include "markdown.h"
 
 
-size_t get_file_size(FILE *stream);
-
+size_t get_file_size(const FILE *stream);
+size_t count(const char *str, size_t str_len, char );
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
@@ -19,10 +19,15 @@ int main(int argc, char *argv[])
     file_ptr = fopen(argv[1], "r");
 
     /* Allocate space for file on heap */
-    char *contents = malloc(sizeof(char) * get_file_size(file_ptr));
-    fread(contents, sizeof(char), get_file_size(file_ptr), file_ptr);
-
-
+    size_t file_size = get_file_size(file_ptr);
+    char *contents = malloc(sizeof(char) * file_size);
+    fread(contents, sizeof(char), file_size, file_ptr);
+    
+    size_t line_count = count(contents, file_size, '\n');
+    for (size_t line_number = 0; line_number < line_count; line_number++)
+    {
+        // Iterate over lines
+    }
     /* free file buffer */
     free(contents);
     return 0;
