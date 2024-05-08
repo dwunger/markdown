@@ -6,7 +6,8 @@
 
 
 size_t get_file_size(const FILE *stream);
-size_t count(const char *str, size_t str_len, char );
+size_t count(const char *str, size_t str_len, char delimiter);
+
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-size_t get_file_size(FILE *stream)
+size_t get_file_size(const FILE *stream)
 {
     // Save cursor position
     long store_position = 0;
@@ -52,3 +53,17 @@ size_t get_file_size(FILE *stream)
 
     return (size_t)(fend - fstart);
 }
+
+size_t count(const char *str, size_t str_len, char delimiter) {
+    if (str == NULL) {
+        perror("`count` received null pointer to str");
+    }
+    size_t count = 0;
+    for (size_t idx = 0; idx < str_len; idx++) {
+        if (str[idx] == delimiter) {
+            count++;
+        }
+    }
+    return count;
+}
+
