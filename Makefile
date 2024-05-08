@@ -28,7 +28,21 @@ GTEST_SRCS := $(GTEST_DIR)/googletest/src/gtest-all.cc
 GTEST_OBJS := $(OBJ_DIR)/gtest-all.o
 
 # Targets
-.PHONY: all clean test help
+.PHONY: run all clean test help
+
+run: $(BIN_DIR)/main
+
+$(BIN_DIR)/main: $(OBJS) $(OBJ_DIR)/main.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/main.o: $(SRC_DIR)/main.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+
+	powershell -Command "./build/bin/main.exe"
 
 all: $(BIN_DIR)/main
 
