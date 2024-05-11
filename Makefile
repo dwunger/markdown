@@ -1,7 +1,7 @@
 # Compiler settings
 CC := gcc
 CXX := g++
-CFLAGS := -Wall -Wextra -std=c11 -I./src -I./include -I./googletest/googletest/include
+CFLAGS := -g -Wall -Wextra -std=c11 -I./src -I./include -I./googletest/googletest/include
 CXXFLAGS := -Wall -Wextra -std=c++11 -I./src -I./include -I./googletest/googletest/include -DGTEST_OS_WINDOWS -D_UNICODE -DUNICODE
 
 # Directories
@@ -28,21 +28,13 @@ GTEST_SRCS := $(GTEST_DIR)/googletest/src/gtest-all.cc
 GTEST_OBJS := $(OBJ_DIR)/gtest-all.o
 
 # Targets
-.PHONY: run all clean test help
-
-run: $(BIN_DIR)/main
-
-$(BIN_DIR)/main: $(OBJS) $(OBJ_DIR)/main.o | $(BIN_DIR)
-	$(CC) $(CFLAGS) $^ -o $@
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/main.o: $(SRC_DIR)/main.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-
-	powershell -Command "./build/bin/main.exe"
+.PHONY: debug run all clean test help
+debug:
+	@echo "=== DEBUG MAIN ==="
+	powershell -Command "gdb -tui --args ./build/bin/main.exe ./src/example.md"
+run: 
+	@echo "=== RUNNING MAIN ==="
+	powershell -Command "./build/bin/main.exe ./src/example.md"
 
 all: $(BIN_DIR)/main
 
@@ -74,6 +66,8 @@ clean:
 help:
 	@echo "Available targets:"
 	@echo "  all		  - Build the main executable"
+	@echo "  run          - Build and run main executable"
 	@echo "  test         - Build and run the unit tests"
 	@echo "  clean        - Clean the build artifacts and Google Test library"
+	@echo "  debug        - Start GDB debug session"
 	@echo "  help         - Display this help message"
