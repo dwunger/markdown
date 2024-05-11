@@ -16,10 +16,32 @@ TEST(MarkdownTest, has_next_line) {
 }
 
 TEST(MarkdownTest, next_line) {
-    const char *multiline_str = "Line 1\nLine 2\nLine 3";
-    // Do nothing
-    EXPECT_STREQ("Line 1\nLine 2\nLine 3", multiline_str);
+    const char *multiline_str = "Line 1\nLine 2\nLast Line";
+    EXPECT_STREQ("Line 1\nLine 2\nLast Line", multiline_str);
+
+    
     // Advance to next line
-    next_line(&multiline_str);
-    EXPECT_STREQ("Line 2\nLine 3", multiline_str);
+    size_t next_line_length = 0;
+    next_line_length = next_line(&multiline_str);
+    EXPECT_STREQ("Line 2\nLast Line", multiline_str);
+    EXPECT_EQ(6, next_line_length);
+
+
+    // Advance to last line
+    next_line_length = 0;
+    next_line_length = next_line(&multiline_str);
+    EXPECT_STREQ("Last Line", multiline_str);
+    EXPECT_EQ(9, next_line_length);
+
+    // Attempt to overrun buffer
+    next_line_length = 0;
+    next_line_length = next_line(&multiline_str);
+    EXPECT_STREQ("", multiline_str);
+    EXPECT_EQ(0, next_line_length);
+
+    // Get NULL signal if caller continues consumption
+    next_line_length = 0;
+    next_line_length = next_line(&multiline_str);
+    EXPECT_EQ(NULL, multiline_str);
+    EXPECT_EQ(0, next_line_length);
 }
