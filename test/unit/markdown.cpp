@@ -16,7 +16,7 @@ TEST(MarkdownTest, has_next_line) {
 }
 
 TEST(MarkdownTest, next_line) {
-    char *multiline_str = "Line 1\nLine 2\nLine 3";
+    const char *multiline_str = "Line 1\nLine 2\nLine 3";
     // Do nothing
     EXPECT_STREQ("Line 1\nLine 2\nLine 3", multiline_str);
     // Advance to next line
