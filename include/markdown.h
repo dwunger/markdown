@@ -1,6 +1,8 @@
 #ifndef MARKDOWN_H 
 #define MARKDOWN_H
 
+size_t next_line(const char **text);
+bool has_next_line(const char *text);
 char *user_strtok_r(char *str, char delim, char **save_ptr);
 void print_osc(const char *label, const char *uri);
 int contains_inline_link(const char *line);

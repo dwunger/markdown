@@ -1,9 +1,31 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define ESC 27
 #define EMPTY_LINE_PLACEHOLDER "@@EMPTY_LINE@@"
+
+size_t next_line(const char **text) {
+   
+    size_t size = 0;
+    char *newline_ptr = strchr(*text, '\n');
+    
+    if (newline_ptr == NULL) {
+        return 0; 
+    }
+    
+    *text = newline_ptr + 1;
+    
+    while (*newline_ptr != '\n' && *newline_ptr != '\0') { size++; }
+    
+    return size;
+}
+
+
+bool has_next_line(const char *text) {
+    return strchr(text, '\n') != NULL;
+}
 
 void print_osc(const char *label, const char *uri) {
     printf("%c]8;;%s%c\\%s%c]8;;%c\\", ESC, uri, ESC, label, ESC, ESC);
