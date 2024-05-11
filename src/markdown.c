@@ -7,17 +7,25 @@
 #define EMPTY_LINE_PLACEHOLDER "@@EMPTY_LINE@@"
 
 size_t next_line(const char **text) {
-   
+    // Base Condition:
+    // End of string. Return null pointer and zero-length
+    // This will provide a terminal signal if not used
+    // with the has_next guard
+    if (**text == '\0') { *text = NULL; return 0; }
+
     size_t size = 0;
     char *newline_ptr = strchr(*text, '\n');
     
     if (newline_ptr == NULL) {
-        return 0; 
+        *text = strchr(*text, '\0'); // Advance to the end of string
+        return 0; // Return 0 size
+        
     }
     
-    *text = newline_ptr + 1;
+    newline_ptr++;
+    *text = newline_ptr;    
     
-    while (*newline_ptr != '\n' && *newline_ptr != '\0') { size++; }
+    while (*newline_ptr != '\n' && *newline_ptr != '\0') { size++; newline_ptr++; }
     
     return size;
 }
